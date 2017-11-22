@@ -10,17 +10,41 @@ services:
 
 env:
   - DOCKER_DISTRO="debian:jessie" ANSIBLE_VERSION=latest
-  - DOCKER_DISTRO="debian:jessie" ANSIBLE_VERSION=2.4.0.0
-  - DOCKER_DISTRO="debian:jessie" ANSIBLE_VERSION=2.3.0.0
-  - DOCKER_DISTRO="debian:jessie" ANSIBLE_VERSION=2.2.0.0
-  - DOCKER_DISTRO="debian:jessie" ANSIBLE_VERSION=2.1.0.0
-  - DOCKER_DISTRO="debian:jessie" ANSIBLE_VERSION=2.0.0.0
+  #  - DOCKER_DISTRO="debian:jessie" ANSIBLE_VERSION=2.4.0.0
+  #  - DOCKER_DISTRO="debian:jessie" ANSIBLE_VERSION=2.3.0.0
+  #  - DOCKER_DISTRO="debian:jessie" ANSIBLE_VERSION=2.2.0.0
+  #  - DOCKER_DISTRO="debian:jessie" ANSIBLE_VERSION=2.1.0.0
+  #  - DOCKER_DISTRO="debian:jessie" ANSIBLE_VERSION=2.0.0.0
+  - DOCKER_DISTRO="debian:stretch" ANSIBLE_VERSION=latest
+  #  - DOCKER_DISTRO="debian:stretch" ANSIBLE_VERSION=2.4.0.0
+  #  - DOCKER_DISTRO="debian:stretch" ANSIBLE_VERSION=2.3.0.0
+  #  - DOCKER_DISTRO="debian:stretch" ANSIBLE_VERSION=2.2.0.0
+  #  - DOCKER_DISTRO="debian:stretch" ANSIBLE_VERSION=2.1.0.0
+  #  - DOCKER_DISTRO="debian:stretch" ANSIBLE_VERSION=2.0.0.0
   - DOCKER_DISTRO="ubuntu:trusty" ANSIBLE_VERSION=latest
-  - DOCKER_DISTRO="ubuntu:trusty" ANSIBLE_VERSION=2.4.0.0
-  - DOCKER_DISTRO="ubuntu:trusty" ANSIBLE_VERSION=2.3.0.0
-  - DOCKER_DISTRO="ubuntu:trusty" ANSIBLE_VERSION=2.2.0.0
-  - DOCKER_DISTRO="ubuntu:trusty" ANSIBLE_VERSION=2.1.0.0
-  - DOCKER_DISTRO="ubuntu:trusty" ANSIBLE_VERSION=2.0.0.0
+  #  - DOCKER_DISTRO="ubuntu:trusty" ANSIBLE_VERSION=2.4.0.0
+  #  - DOCKER_DISTRO="ubuntu:trusty" ANSIBLE_VERSION=2.3.0.0
+  #  - DOCKER_DISTRO="ubuntu:trusty" ANSIBLE_VERSION=2.2.0.0
+  #  - DOCKER_DISTRO="ubuntu:trusty" ANSIBLE_VERSION=2.1.0.0
+  #  - DOCKER_DISTRO="ubuntu:trusty" ANSIBLE_VERSION=2.0.0.0
+  - DOCKER_DISTRO="ubuntu:zesty" ANSIBLE_VERSION=latest
+  #  - DOCKER_DISTRO="ubuntu:zesty" ANSIBLE_VERSION=2.4.0.0
+  #  - DOCKER_DISTRO="ubuntu:zesty" ANSIBLE_VERSION=2.3.0.0
+  #  - DOCKER_DISTRO="ubuntu:zesty" ANSIBLE_VERSION=2.2.0.0
+  #  - DOCKER_DISTRO="ubuntu:zesty" ANSIBLE_VERSION=2.1.0.0
+  #  - DOCKER_DISTRO="ubuntu:zesty" ANSIBLE_VERSION=2.0.0.0
+  - DOCKER_DISTRO="centos:7" ANSIBLE_VERSION=latest
+  #  - DOCKER_DISTRO="centos:7" ANSIBLE_VERSION=2.4.0.0
+  #  - DOCKER_DISTRO="centos:7" ANSIBLE_VERSION=2.3.0.0
+  #  - DOCKER_DISTRO="centos:7" ANSIBLE_VERSION=2.2.0.0
+  #  - DOCKER_DISTRO="centos:7" ANSIBLE_VERSION=2.1.0.0
+  #  - DOCKER_DISTRO="centos:7" ANSIBLE_VERSION=2.0.0.0
+  - DOCKER_DISTRO="fedora:26" ANSIBLE_VERSION=latest
+  #  - DOCKER_DISTRO="fedora:26" ANSIBLE_VERSION=2.4.0.0
+  #  - DOCKER_DISTRO="fedora:26" ANSIBLE_VERSION=2.3.0.0
+  #  - DOCKER_DISTRO="fedora:26" ANSIBLE_VERSION=2.2.0.0
+  #  - DOCKER_DISTRO="fedora:26" ANSIBLE_VERSION=2.1.0.0
+  #  - DOCKER_DISTRO="fedora:26" ANSIBLE_VERSION=2.0.0.0
 
 branches:
   only:
@@ -47,7 +71,7 @@ before_script:
       sudo build-essential libffi-dev libssl-dev python-pip python-dev &&
     pip install --upgrade setuptools &&
     mkdir -p /etc/ansible &&
-    echo '[local]\nlocalhost ansible_connection=local' > /etc/ansible/hosts"
+    echo \"[local]\nlocalhost ansible_connection=local\" > /etc/ansible/hosts"
   - >
     docker exec "$(cat ${container_id})" bash -c "
     if [ \"$ANSIBLE_VERSION\" = \"latest\" ]; then pip install ansible;
