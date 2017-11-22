@@ -5,58 +5,93 @@ language: python
 python:
   - "2.7"
 
+services:
+  - docker
+
 env:
-  - ANSIBLE_VERSION=latest
-  - ANSIBLE_VERSION=2.4.1.0
-  - ANSIBLE_VERSION=2.4.0.0
-  - ANSIBLE_VERSION=2.3.2.0
-  - ANSIBLE_VERSION=2.3.1.0
-  - ANSIBLE_VERSION=2.3.0.0
-  - ANSIBLE_VERSION=2.2.3.0
-  - ANSIBLE_VERSION=2.2.2.0
-  - ANSIBLE_VERSION=2.2.1.0
-  - ANSIBLE_VERSION=2.2.0.0
-  - ANSIBLE_VERSION=2.1.6
-  - ANSIBLE_VERSION=2.1.5
-  - ANSIBLE_VERSION=2.1.4
-  - ANSIBLE_VERSION=2.1.3
-  - ANSIBLE_VERSION=2.1.2
-  - ANSIBLE_VERSION=2.1.1.0
-  - ANSIBLE_VERSION=2.1.0.0
-  - ANSIBLE_VERSION=2.0.2.0
-  - ANSIBLE_VERSION=2.0.1.0
-  - ANSIBLE_VERSION=2.0.0.2
-  - ANSIBLE_VERSION=2.0.0.1
-  - ANSIBLE_VERSION=2.0.0.0
+  - DOCKER_DISTRO="debian:jessie" ANSIBLE_VERSION=latest
+  - DOCKER_DISTRO="debian:jessie" ANSIBLE_VERSION=2.4.0.0
+  - DOCKER_DISTRO="debian:jessie" ANSIBLE_VERSION=2.3.0.0
+  - DOCKER_DISTRO="debian:jessie" ANSIBLE_VERSION=2.2.0.0
+  - DOCKER_DISTRO="debian:jessie" ANSIBLE_VERSION=2.1.0.0
+  - DOCKER_DISTRO="debian:jessie" ANSIBLE_VERSION=2.0.0.0
+  - DOCKER_DISTRO="debian:stretch" ANSIBLE_VERSION=latest
+  - DOCKER_DISTRO="debian:stretch" ANSIBLE_VERSION=2.4.0.0
+  - DOCKER_DISTRO="debian:stretch" ANSIBLE_VERSION=2.3.0.0
+  - DOCKER_DISTRO="debian:stretch" ANSIBLE_VERSION=2.2.0.0
+  - DOCKER_DISTRO="debian:stretch" ANSIBLE_VERSION=2.1.0.0
+  - DOCKER_DISTRO="debian:stretch" ANSIBLE_VERSION=2.0.0.0
+  - DOCKER_DISTRO="ubuntu:trusty" ANSIBLE_VERSION=latest
+  - DOCKER_DISTRO="ubuntu:trusty" ANSIBLE_VERSION=2.4.0.0
+  - DOCKER_DISTRO="ubuntu:trusty" ANSIBLE_VERSION=2.3.0.0
+  - DOCKER_DISTRO="ubuntu:trusty" ANSIBLE_VERSION=2.2.0.0
+  - DOCKER_DISTRO="ubuntu:trusty" ANSIBLE_VERSION=2.1.0.0
+  - DOCKER_DISTRO="ubuntu:trusty" ANSIBLE_VERSION=2.0.0.0
+  - DOCKER_DISTRO="ubuntu:zesty" ANSIBLE_VERSION=latest
+  - DOCKER_DISTRO="ubuntu:zesty" ANSIBLE_VERSION=2.4.0.0
+  - DOCKER_DISTRO="ubuntu:zesty" ANSIBLE_VERSION=2.3.0.0
+  - DOCKER_DISTRO="ubuntu:zesty" ANSIBLE_VERSION=2.2.0.0
+  - DOCKER_DISTRO="ubuntu:zesty" ANSIBLE_VERSION=2.1.0.0
+  - DOCKER_DISTRO="ubuntu:zesty" ANSIBLE_VERSION=2.0.0.0
 
 branches:
   only:
     - master
 
 before_install:
-  - sudo apt-get update -qq
+  - docker pull "$DOCKER_DISTRO"
 
-install:
-  # Install Ansible.
+install: true
+before_script:
+  - container_id=$(mktemp)
   - >
-    if [ "$ANSIBLE_VERSION" = "latest" ]; then pip install ansible;
-    else pip install ansible==$ANSIBLE_VERSION; fi
-  - if [ "$ANSIBLE_VERSION" = "latest" ]; then pip install ansible-lint; fi
+    docker run --detach
+    --volume="${PWD}":/etc/ansible/roles/rkhunter:ro
+    $DOCKER_DISTRO bash -c 'while true; do sleep 10; done' > "${container_id}"
+  - >
+    docker exec "$(cat ${container_id})" bash -c "
+    apt-get update && apt-get upgrade -y &&
+    apt-get install -y \
+      sudo build-essential libffi-dev libssl-dev python-pip python-dev &&
+    pip install --upgrade setuptools && mkdir -p /etc/ansible &&
+    echo 'localhost ansible_connection=local' > /etc/ansible/hosts";
+  - >
+    docker exec "$(cat ${container_id})" bash -c "
+    if [ \"$ANSIBLE_VERSION\" = \"latest\" ]; then pip install ansible;
+    else pip install ansible==$ANSIBLE_VERSION; fi"
+  - >
+    docker exec "$(cat ${container_id})" bash -c "
+    if [ \"$ANSIBLE_VERSION\" = \"latest\" ]; then pip install ansible-lint &&
+    pip install yamllint; fi"
 
 script:
   # Check the role/playbook's syntax.
-  - ansible-playbook -i tests/inventory tests/test.yml --syntax-check
+  - >
+    docker exec "$(cat ${container_id})"
+    ansible-playbook --syntax-check /etc/ansible/roles/rkhunter/tests/test.yml
 
   # Run the role/playbook with ansible-playbook.
-  - ansible-playbook -i tests/inventory tests/test.yml -vvvv
+  - >
+    docker exec "$(cat ${container_id})"
+    ansible-playbook -vvvv /etc/ansible/roles/rkhunter/tests/test.yml
 
   # Run the role/playbook again, checking to make sure it's idempotent.
   - >
-    ansible-playbook -i tests/inventory tests/test.yml
+    docker exec "$(cat ${container_id})" bash -c "
+    ansible-playbook /etc/ansible/roles/rkhunter/tests/test.yml
     | grep -q 'changed=0.*failed=0'
     && (echo 'Idempotence test: pass' && exit 0)
-    || (echo 'Idempotence test: fail' && exit 1)
+    || (echo 'Idempotence test: fail' && exit 1)"
 
   - >
-    if [ "$ANSIBLE_VERSION" = "latest" ]; then
-    ansible-lint tests/test.yml || true; fi
+    docker exec "$(cat ${container_id})" bash -c "
+    if [ \"$ANSIBLE_VERSION\" = \"latest\" ]; then
+    ansible-lint /etc/ansible/roles/rkhunter/tests/test.yml; fi"
+
+  - >
+    docker exec "$(cat ${container_id})" bash -c "
+    if [ \"$ANSIBLE_VERSION\" = \"latest\" ]; then
+    yamllint /etc/ansible/roles/rkhunter/; fi"
+
+after_script:
+  - docker rm -f "$(cat ${container_id})"
