@@ -2,13 +2,16 @@
 galaxy_info:
   author: Maxime Lareo
   description: Install and configure Rootkit Hunter
-  # issue_tracker_url: http://example.com/issue/tracker
+  issue_tracker_url: https://github.com/maxlareo/ansible-rkhunter/issues
   license: Apache
-  min_ansible_version: 1.2
+  min_ansible_version: 2.0.0.0
   platforms:
     - name: Debian
       versions:
         - jessie
+    - name: Ubuntu
+      versions:
+        - trusty
 
   galaxy_tags:
     - rkhunter
