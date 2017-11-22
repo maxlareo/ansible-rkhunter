@@ -1,0 +1,28 @@
+---  # defaults file for rkhunter
+
+# /etc/default/rkhunter
+rkhunter_cron_daily_run: true
+rkhunter_cron_db_update: true
+rkhunter_db_update_email: false
+rkhunter_report_email: root
+rkhunter_apt_autogen: false
+rkhunter_nice: 0
+rkhunter_run_check_on_battery: false
+
+# /etc/rkhunter.conf
+rkhunter_rotate_mirrors: 1
+rkhunter_update_mirrors: 1
+rkhunter_mirrors_mode: 0
+rkhunter_mail_on_warning: root@localhost
+rkhunter_mail_cmd: 'mail -s "[rkhunter] Warnings found for ${HOST_NAME}"'
+rkhunter_bindir: "{{ ansible_env.PATH | replace(':',' ')}}"
+rkhunter_language: en
+rkhunter_logfile: /var/log/rkhunter.log
+rkhunter_append_log: 0
+rkhunter_copy_log_on_error: 0
+rkhunter_use_syslog: NONE
+rkhunter_allow_ssh_root_user: no
+rkhunter_enable_tests: ALL
+rkhunter_disable_tests: suspscan hidden_ports hidden_procs deleted_files packet_cap_apps apps
+rkhunter_hash_cmd: SHA256
+rkhunter_pkgmgr: NONE

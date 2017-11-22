@@ -1,0 +1,6 @@
+---  # test file for rkhunter
+- hosts: localhost
+  become: true
+  connection: local
+  roles:
+    - ../../

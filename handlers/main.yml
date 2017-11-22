@@ -1,0 +1,3 @@
+---  # handlers file for rkhunter
+- name: update rkhunter
+  command: rkhunter --propupd

@@ -1,0 +1,59 @@
+---  # tasks file for rkhunter
+
+- name: Install rkhunter
+  apt:
+    name: rkhunter
+    update_cache: true
+    cache_valid_time: "{{ apt_update_cache_valid_time | default(3600) }}"
+    state: present
+  tags:
+    - install
+    - rkhunter
+    - rkhunter-install
+
+- name: Configure /etc/rkhunter.conf
+  template:
+    src: "etc/rkhunter.conf.j2"
+    dest: /etc/rkhunter.conf
+    owner: root
+    group: root
+    mode: 0644
+  notify: update rkhunter
+  tags:
+    - configuration
+    - rkhunter
+    - rkhunter-configuration
+
+- name: Configure /etc/default/rkhunter
+  template:
+    src: etc/default/rkhunter.j2
+    dest: /etc/default/rkhunter
+    owner: root
+    group: root
+    mode: 0644
+  notify: update rkhunter
+  tags:
+    - configuration
+    - rkhunter
+    - rkhunter-configuration
+
+# By default, on debian, the log file is /var/log/rkhunter.log
+- name: Create logfile directory
+  file:
+    path: '/var/log/rkhunter/'
+    state: 'directory'
+    mode: 0644
+  tags:
+    - configuration
+    - rkhunter
+    - rkhunter-configuration
+
+- name: rkhunter update
+  command: rkhunter --update
+  register: rkhunter_update
+  failed_when: rkhunter_update.rc != 2 and rkhunter_update.rc != 0
+  changed_when: false
+  tags:
+    - update
+    - rkhunter
+    - rkhunter-update
