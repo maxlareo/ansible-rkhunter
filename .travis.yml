@@ -43,7 +43,7 @@ before_script:
   - >
     docker exec "$(cat ${container_id})"
     apt-get update &&
-    apt-get upgradde -y
+    apt-get upgrade -y
     apt-get install python python-pip
   - >
     docker exec "$(cat ${container_id})"
