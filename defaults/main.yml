@@ -21,8 +21,9 @@ rkhunter_logfile: /var/log/rkhunter.log
 rkhunter_append_log: 0
 rkhunter_copy_log_on_error: 0
 rkhunter_use_syslog: NONE
-rkhunter_allow_ssh_root_user: no
+rkhunter_allow_ssh_root_user: 'no'
 rkhunter_enable_tests: ALL
-rkhunter_disable_tests: suspscan hidden_ports hidden_procs deleted_files packet_cap_apps apps
+rkhunter_disable_tests: >
+  suspscan hidden_ports hidden_procs deleted_files packet_cap_apps apps
 rkhunter_hash_cmd: SHA256
 rkhunter_pkgmgr: NONE
