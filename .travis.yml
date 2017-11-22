@@ -32,8 +32,10 @@ before_install:
   - sudo apt-get update -qq
   - docker pull "$DOCKER_DISTRO"
 
+install: true
 before_script:
   - container_id=$(mktemp)
+  - echo "$container_id"
   - >
     'docker run --detach
     --volume="${PWD}":/etc/ansible/roles/rkhunter:ro
