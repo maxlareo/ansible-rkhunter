@@ -58,20 +58,23 @@ before_install:
 install: true
 before_script:
   - container_id=$(mktemp)
-  - echo "$container_id"
   - >
     docker run --detach
     --volume="${PWD}":/etc/ansible/roles/rkhunter:ro
     $DOCKER_DISTRO bash -c 'while true; do sleep 10; done' > "${container_id}"
   - >
-    docker exec "$(cat ${container_id})" bash -c "
-    apt-get update &&
-    apt-get upgrade -y &&
+    if [[ "$DOCKER_DISTRO" =~ "debian" || "$DOCKER_DISTRO" =~ "ubuntu" ]];
+    then docker exec "$(cat ${container_id})" bash -c "
+    apt-get update && apt-get upgrade -y &&
     apt-get install -y \
       sudo build-essential libffi-dev libssl-dev python-pip python-dev &&
-    pip install --upgrade setuptools &&
-    mkdir -p /etc/ansible &&
-    echo \"[local]\nlocalhost ansible_connection=local\" > /etc/ansible/hosts"
+    pip install --upgrade setuptools && mkdir -p /etc/ansible &&
+    echo \"[local]\nlocalhost ansible_connection=local\" > /etc/ansible/hosts";
+    else docker exec "$(cat ${container_id})" bash -c "
+    yum -y update; yum clean all; yum makecache fast &&
+    yum -y install deltarpm epel-release initscripts &&
+    yum install -y python-devel libffi-devel openssl-devel gcc python-pip";
+    fi
   - >
     docker exec "$(cat ${container_id})" bash -c "
     if [ \"$ANSIBLE_VERSION\" = \"latest\" ]; then pip install ansible;
