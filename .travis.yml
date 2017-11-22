@@ -63,7 +63,8 @@ before_script:
     else pip install ansible==$ANSIBLE_VERSION; fi"
   - >
     docker exec "$(cat ${container_id})" bash -c "
-    if [ \"$ANSIBLE_VERSION\" = \"latest\" ]; then pip install ansible-lint; fi"
+    if [ \"$ANSIBLE_VERSION\" = \"latest\" ]; then pip install ansible-lint &&
+    pip install yamllint; fi"
 
 script:
   # Check the role/playbook's syntax.
@@ -87,4 +88,9 @@ script:
   - >
     docker exec "$(cat ${container_id})" bash -c "
     if [ \"$ANSIBLE_VERSION\" = \"latest\" ]; then
-    ansible-lint /etc/ansible/roles/rkhunter/tests/test.yml || true; fi"
+    ansible-lint /etc/ansible/roles/rkhunter/tests/test.yml; fi"
+
+  - >
+    docker exec "$(cat ${container_id})" bash -c "
+    if [ \"$ANSIBLE_VERSION\" = \"latest\" ]; then
+    yamllint /etc/ansible/roles/rkhunter/; fi"
