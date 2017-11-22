@@ -37,24 +37,21 @@ before_script:
   - container_id=$(mktemp)
   - echo "$container_id"
   - >
-    'docker run --detach
+    docker run --detach
     --volume="${PWD}":/etc/ansible/roles/rkhunter:ro
-    $DOCKER_DISTRO "/bin/bash"
-    > "${container_id}"'
+    $DOCKER_DISTRO "/bin/bash" > "${container_id}"
   - >
-    'docker exec "$(cat ${container_id})"
+    docker exec "$(cat ${container_id})"
     apt-get update &&
     apt-get upgradde -y
-    apt-get install python python-pip'
+    apt-get install python python-pip
   - >
-    'docker exec "$(cat ${container_id})"
+    docker exec "$(cat ${container_id})"
     if [ "$ANSIBLE_VERSION" = "latest" ]; then pip install ansible;
     else pip install ansible==$ANSIBLE_VERSION; fi
-    '
   - >
-    'docker exec "$(cat ${container_id})"
+    docker exec "$(cat ${container_id})"
     if [ "$ANSIBLE_VERSION" = "latest" ]; then pip install ansible-lint; fi
-    '
 
 script:
   # Check the role/playbook's syntax.
