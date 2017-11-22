@@ -39,7 +39,7 @@ before_script:
   - >
     docker run --detach
     --volume="${PWD}":/etc/ansible/roles/rkhunter:ro
-    $DOCKER_DISTRO "/bin/bash" > "${container_id}"
+    $DOCKER_DISTRO "/lib/systemd/systemd" > "${container_id}"
   - >
     docker exec "$(cat ${container_id})"
     apt-get update &&
