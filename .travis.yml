@@ -94,3 +94,6 @@ script:
     docker exec "$(cat ${container_id})" bash -c "
     if [ \"$ANSIBLE_VERSION\" = \"latest\" ]; then
     yamllint /etc/ansible/roles/rkhunter/; fi"
+
+after_script:
+  - docker rm -f "$(cat ${container_id})"
