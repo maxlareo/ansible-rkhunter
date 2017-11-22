@@ -44,7 +44,8 @@ before_script:
     docker exec "$(cat ${container_id})" bash -c "
     apt-get update &&
     apt-get upgrade -y &&
-    apt-get install -y build-essential python-pip python-dev &&
+    apt-get install -y \
+      sudo build-essential libffi-dev libssl-dev python-pip python-dev &&
     pip install --upgrade setuptools"
   - >
     docker exec "$(cat ${container_id})" bash -c "
