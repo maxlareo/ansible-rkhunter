@@ -4,11 +4,11 @@
 
 Install and configure Rootkit Hunter
 
-## Requirements
+## Requirements
 
 None
 
-## Role Variables
+## Role Variables
 
 ### About the `/etc/default/rkhunter` file
 
@@ -39,27 +39,27 @@ None
 - `rkhunter_hash_cmd`: [default: `SHA256`]: Specify the command to use for the file properties hash value check
 - `rkhunter_pkgmgr`: [default: `NONE`]: Tells rkhunter to use the specified package manager to obtain the file property information
 
-## Dependencies
+## Dependencies
 
 None
 
-## Example Playbook
+## Example Playbook
 
-` ̀ ̀yaml
+```yaml
 ---
 - hosts: all
   roles:
     - rkhunter
-` ̀ ̀
+```
 
-## License
+## License
 
 Apache 2.0
 
-## Author Information
+## Author Information
 
 [Maxime Lareo](https://github.com/maxlareo)
 
-## Feedback, bug-reports, requests, ...
+## Feedback, bug-reports, requests, ...
 
 Are [welcome](https://github.com/maxlareo/ansible-rkhunter/issues)! 
