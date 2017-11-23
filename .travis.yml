@@ -16,23 +16,8 @@ env:
   - DOCKER_DISTRO="debian:stretch" ANSIBLE_VERSION=2.1.0.0
   - DOCKER_DISTRO="debian:stretch" ANSIBLE_VERSION=2.0.0.0
   - DOCKER_DISTRO="debian:jessie" ANSIBLE_VERSION=latest
-  - DOCKER_DISTRO="debian:jessie" ANSIBLE_VERSION=2.4.0.0
-  - DOCKER_DISTRO="debian:jessie" ANSIBLE_VERSION=2.3.0.0
-  - DOCKER_DISTRO="debian:jessie" ANSIBLE_VERSION=2.2.0.0
-  - DOCKER_DISTRO="debian:jessie" ANSIBLE_VERSION=2.1.0.0
-  - DOCKER_DISTRO="debian:jessie" ANSIBLE_VERSION=2.0.0.0
   - DOCKER_DISTRO="ubuntu:zesty" ANSIBLE_VERSION=latest
-  - DOCKER_DISTRO="ubuntu:zesty" ANSIBLE_VERSION=2.4.0.0
-  - DOCKER_DISTRO="ubuntu:zesty" ANSIBLE_VERSION=2.3.0.0
-  - DOCKER_DISTRO="ubuntu:zesty" ANSIBLE_VERSION=2.2.0.0
-  - DOCKER_DISTRO="ubuntu:zesty" ANSIBLE_VERSION=2.1.0.0
-  - DOCKER_DISTRO="ubuntu:zesty" ANSIBLE_VERSION=2.0.0.0
   - DOCKER_DISTRO="ubuntu:trusty" ANSIBLE_VERSION=latest
-  - DOCKER_DISTRO="ubuntu:trusty" ANSIBLE_VERSION=2.4.0.0
-  - DOCKER_DISTRO="ubuntu:trusty" ANSIBLE_VERSION=2.3.0.0
-  - DOCKER_DISTRO="ubuntu:trusty" ANSIBLE_VERSION=2.2.0.0
-  - DOCKER_DISTRO="ubuntu:trusty" ANSIBLE_VERSION=2.1.0.0
-  - DOCKER_DISTRO="ubuntu:trusty" ANSIBLE_VERSION=2.0.0.0
 
 before_install:
   - docker pull "$DOCKER_DISTRO"
