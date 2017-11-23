@@ -1,38 +1,65 @@
-Role Name
-=========
+# rkhunter
 
-A brief description of the role goes here.
+[![Build Status](https://travis-ci.org/maxlareo/ansible-rkhunter.svg?branch=master)](https://travis-ci.org/maxlareo/ansible-rkhunter)
 
-Requirements
-------------
+Install and configure Rootkit Hunter
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+## Requirements
 
-Role Variables
---------------
+None
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+## Role Variables
 
-Dependencies
-------------
+### About the `/etc/default/rkhunter` file
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+- `rkhunter_cron_daily_run`: [default: `true`]: Set this to yes to enable rkhunter daily runs
+- `rkhunter_cron_db_update`: [default: `true`]: Set this to yes to enable rkhunter weekly database updates
+- `rkhunter_db_update_email`: [default: `false`]: Set this to yes to enable reports of weekly database updates
+- `rkhunter_report_email`: [default: `root`]: Set this to the email address where reports and run output should be sent
+- `rkhunter_apt_autogen`: [default: `false`]: Set this to yes to enable automatic database updates
+- `rkhunter_nice`: [default: `0`]: Nicenesses range from -20 (most favorable scheduling) to 19 (least favorable)
+- `rkhunter_run_check_on_battery`: [default: `false`]: Should daily check be run when running on battery, powermgmt-base is required to detect if running on battery or on AC power
 
-Example Playbook
-----------------
+### About the `/etc/rkhunter.conf` file
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
+- `rkhunter_rotate_mirrors`: [default: `1`]: `1` to rotate between mirrors, `0` to treat the mirrors list as priority list, use first, if fail use next, etc
+- `rkhunter_update_mirrors`: [default: `1`]: `1` to update mirrors list when update, `0` to not update mirrors list
+- `rkhunter_mirrors_mode`: [default: `0`]: `0`  to use any mirror, `1` to only use local mirrors, `2` to only use remote mirrors
+- `rkhunter_mail_on_warning`: [default: `root@localhost`]: Email a message to this address if a warning is found
+- `rkhunter_mail_cmd`: [default: `'mail -s "[rkhunter] Warnings found for ${HOST_NAME}"'`]: The mail command to use if MAIL-ON-WARNING is set
+- `rkhunter_bindir`: [default: `"{{ ansible_env.PATH | replace(':',' ')}}"`]: Used to modify the command directory list used by rkhunter to locate commands (that is, its PATH)
+- `rkhunter_language`: [default: `en`]: The default language to use
+- `rkhunter_logfile`: [default: `/var/log/rkhunter.log`]: The log file pathname
+- `rkhunter_append_log`: [default: `0`]: `0` will cause a new log file to be created, `1` the log file is to be appended
+- `rkhunter_copy_log_on_error`: [default: `0`]: `0` the log file will not be copied, `1` the log file is to be copied
+- `rkhunter_use_syslog`: [default: `NONE`]: Enable the rkhunter check start and finish times to be logged by syslog. Warning messages will also be logged. The value of the option must be a standard syslog facility and priority, separated by a dot
+- `rkhunter_allow_ssh_root_user`: [default: `'no'`]: Checked against the SSH configuration file 'PermitRootLogin' option, a warning will be displayed if they do not match
+- `rkhunter_enable_tests`: [default: `ALL`]: Determine which tests are to be performed
+- `rkhunter_disable_tests`: [default: `suspscan hidden_ports hidden_procs deleted_files packet_cap_apps apps`]: The list of disabled tests is applied to the list of enabled tests
+- `rkhunter_hash_cmd`: [default: `SHA256`]: Specify the command to use for the file properties hash value check
+- `rkhunter_pkgmgr`: [default: `NONE`]: Tells rkhunter to use the specified package manager to obtain the file property information
 
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
+## Dependencies
 
-License
--------
+None
 
-BSD
+## Example Playbook
 
-Author Information
-------------------
+` ̀ ̀yaml
+---
+- hosts: all
+  roles:
+    - rkhunter
+` ̀ ̀
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+## License
+
+Apache 2.0
+
+## Author Information
+
+[Maxime Lareo](https://github.com/maxlareo)
+
+## Feedback, bug-reports, requests, ...
+
+Are [welcome](https://github.com/maxlareo/ansible-rkhunter/issues)! 
