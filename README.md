@@ -43,6 +43,12 @@ None
 - `rkhunter_writewhitelist`: [default: `[]`]: Allow the specified files to have the 'others' (world) permission have the write-bit set
 - `rkhunter_scriptwhitelist`: [default: `[]`]: Allow the specified files to be a script
 - `rkhunter_immutwhitelist`: [default: `[]`]: Allow the specified file to have the immutable attribute set
+- `rkhunter_allowhiddendir`: [default: `[]`]: Allow the specified hidden directory to be whitelisted
+- `rkhunter_allowhiddenfile`: [default: `[]`]: Allow the specified hidden file to be whitelisted
+- `rkhunter_allowprocdelfile`: [default: `''`]: Allow the specified process to use deleted files. The process name may be followed by a colon-separated list of full pathnames (which have been deleted)
+- `rkhunter_allowproclisten`: [default: `[]`]: Allow the specified process to listen on any network interface
+- `rkhunter_port_whitelist`: [default: `[]`]: Whitelist network ports, space-separated list of one or more of two types of whitelisting, a 'protocol:port' pair and an asterisk ('*')
+- `rkhunter_port_path_whitelist`: [default: `[]`]: Whitelist network ports, specifies one of two types of whitelisting, a pathname to an executable and a combined pathname, protocol and port
 
 ## Dependencies
 
