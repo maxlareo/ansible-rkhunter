@@ -633,9 +633,9 @@ IMMUTWHITELIST="{{ elem }}"
 # The default value is the null string.
 #
 #ALLOWHIDDENDIR=/etc/.java
-#ALLOWHIDDENDIR=/dev/.udev
-#ALLOWHIDDENDIR=/dev/.udevdb
-#ALLOWHIDDENDIR=/dev/.mdadm
+{% for elem in rkhunter_allowhiddendir %}
+ALLOWHIDDENDIR="{{ elem }}"
+{% endfor %}
 
 #
 # Allow the specified hidden file to be whitelisted.
@@ -644,13 +644,10 @@ IMMUTWHITELIST="{{ elem }}"
 #
 # The default value is the null string.
 # 
-#ALLOWHIDDENFILE=/usr/share/man/man1/..1.gz
-#ALLOWHIDDENFILE=/usr/bin/.fipscheck.hmac
-#ALLOWHIDDENFILE=/usr/bin/.ssh.hmac
-#ALLOWHIDDENFILE=/usr/lib/.libfipscheck.so.1.1.0.hmac
-#ALLOWHIDDENFILE=/usr/lib/hmaccalc/sha1hmac.hmac
-#ALLOWHIDDENFILE=/usr/lib/hmaccalc/sha256hmac.hmac
 #ALLOWHIDDENFILE=/usr/sbin/.sshd.hmac
+{% for elem in rkhunter_allowhiddenfile %}
+ALLOWHIDDENFILE="{{ elem }}"
+{% endfor %}
 
 #
 # Allow the specified process to use deleted files. The process name may be
@@ -673,7 +670,7 @@ IMMUTWHITELIST="{{ elem }}"
 # The default value is the null string.
 #
 #ALLOWPROCDELFILE=/sbin/cardmgr
-#ALLOWPROCDELFILE=/usr/sbin/mysqld:/tmp/ib*
+ALLOWPROCDELFILE="{{ rkhunter_allowprocdelfile }}"
 
 #
 # Allow the specified process to listen on any network interface.
@@ -683,9 +680,9 @@ IMMUTWHITELIST="{{ elem }}"
 # The default value is the null string.
 #
 #ALLOWPROCLISTEN=/sbin/dhclient
-#ALLOWPROCLISTEN=/usr/bin/dhcpcd
-#ALLOWPROCLISTEN=/usr/sbin/tcpdump
-#ALLOWPROCLISTEN=/usr/sbin/snort-plain
+{% for elem in rkhunter_allowproclisten %}
+ALLOWPROCLISTEN="{{ elem }}"
+{% endfor %}
 
 #
 # Allow the specified network interfaces to be in promiscuous mode.

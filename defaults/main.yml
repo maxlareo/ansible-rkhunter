@@ -32,3 +32,7 @@ rkhunter_attrwhitelist: []
 rkhunter_writewhitelist: []
 rkhunter_scriptwhitelist: []
 rkhunter_immutwhitelist: []
+rkhunter_allowhiddendir: []
+rkhunter_allowhiddenfile: []
+rkhunter_allowprocdelfile: ''
+rkhunter_allowproclisten: []
