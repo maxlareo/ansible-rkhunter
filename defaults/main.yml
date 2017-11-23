@@ -36,3 +36,5 @@ rkhunter_allowhiddendir: []
 rkhunter_allowhiddenfile: []
 rkhunter_allowprocdelfile: ''
 rkhunter_allowproclisten: []
+rkhunter_port_whitelist: []
+rkhunter_port_path_whitelist: []

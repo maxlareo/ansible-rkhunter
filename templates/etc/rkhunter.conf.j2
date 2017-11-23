@@ -968,7 +968,14 @@ ALLOWPROCLISTEN="{{ elem }}"
 # The default value for both options is the null string.
 #
 #PORT_WHITELIST=""
+{% for elem in rkhunter_port_whitelist %}
+PORT_WHITELIST="{{ elem }}"
+{% endfor %}
+
 #PORT_PATH_WHITELIST=""
+{% for elem in rkhunter_port_path_whitelist %}
+PORT_PATH_WHITELIST="{{ elem }}"
+{% endfor %}
 
 #
 # The following option can be used to tell rkhunter where the operating system
