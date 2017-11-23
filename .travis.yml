@@ -9,30 +9,30 @@ services:
   - docker
 
 env:
-  - DOCKER_DISTRO="debian:jessie" ANSIBLE_VERSION=latest
-  - DOCKER_DISTRO="debian:jessie" ANSIBLE_VERSION=2.4.0.0
-  - DOCKER_DISTRO="debian:jessie" ANSIBLE_VERSION=2.3.0.0
-  - DOCKER_DISTRO="debian:jessie" ANSIBLE_VERSION=2.2.0.0
-  - DOCKER_DISTRO="debian:jessie" ANSIBLE_VERSION=2.1.0.0
-  - DOCKER_DISTRO="debian:jessie" ANSIBLE_VERSION=2.0.0.0
   - DOCKER_DISTRO="debian:stretch" ANSIBLE_VERSION=latest
   - DOCKER_DISTRO="debian:stretch" ANSIBLE_VERSION=2.4.0.0
   - DOCKER_DISTRO="debian:stretch" ANSIBLE_VERSION=2.3.0.0
   - DOCKER_DISTRO="debian:stretch" ANSIBLE_VERSION=2.2.0.0
   - DOCKER_DISTRO="debian:stretch" ANSIBLE_VERSION=2.1.0.0
   - DOCKER_DISTRO="debian:stretch" ANSIBLE_VERSION=2.0.0.0
-  - DOCKER_DISTRO="ubuntu:trusty" ANSIBLE_VERSION=latest
-  - DOCKER_DISTRO="ubuntu:trusty" ANSIBLE_VERSION=2.4.0.0
-  - DOCKER_DISTRO="ubuntu:trusty" ANSIBLE_VERSION=2.3.0.0
-  - DOCKER_DISTRO="ubuntu:trusty" ANSIBLE_VERSION=2.2.0.0
-  - DOCKER_DISTRO="ubuntu:trusty" ANSIBLE_VERSION=2.1.0.0
-  - DOCKER_DISTRO="ubuntu:trusty" ANSIBLE_VERSION=2.0.0.0
+  - DOCKER_DISTRO="debian:jessie" ANSIBLE_VERSION=latest
+  - DOCKER_DISTRO="debian:jessie" ANSIBLE_VERSION=2.4.0.0
+  - DOCKER_DISTRO="debian:jessie" ANSIBLE_VERSION=2.3.0.0
+  - DOCKER_DISTRO="debian:jessie" ANSIBLE_VERSION=2.2.0.0
+  - DOCKER_DISTRO="debian:jessie" ANSIBLE_VERSION=2.1.0.0
+  - DOCKER_DISTRO="debian:jessie" ANSIBLE_VERSION=2.0.0.0
   - DOCKER_DISTRO="ubuntu:zesty" ANSIBLE_VERSION=latest
   - DOCKER_DISTRO="ubuntu:zesty" ANSIBLE_VERSION=2.4.0.0
   - DOCKER_DISTRO="ubuntu:zesty" ANSIBLE_VERSION=2.3.0.0
   - DOCKER_DISTRO="ubuntu:zesty" ANSIBLE_VERSION=2.2.0.0
   - DOCKER_DISTRO="ubuntu:zesty" ANSIBLE_VERSION=2.1.0.0
   - DOCKER_DISTRO="ubuntu:zesty" ANSIBLE_VERSION=2.0.0.0
+  - DOCKER_DISTRO="ubuntu:trusty" ANSIBLE_VERSION=latest
+  - DOCKER_DISTRO="ubuntu:trusty" ANSIBLE_VERSION=2.4.0.0
+  - DOCKER_DISTRO="ubuntu:trusty" ANSIBLE_VERSION=2.3.0.0
+  - DOCKER_DISTRO="ubuntu:trusty" ANSIBLE_VERSION=2.2.0.0
+  - DOCKER_DISTRO="ubuntu:trusty" ANSIBLE_VERSION=2.1.0.0
+  - DOCKER_DISTRO="ubuntu:trusty" ANSIBLE_VERSION=2.0.0.0
 
 branches:
   only:
@@ -54,15 +54,17 @@ before_script:
     apt-get install -y \
       sudo build-essential libffi-dev libssl-dev python-pip python-dev &&
     pip install --upgrade setuptools && mkdir -p /etc/ansible &&
-    echo 'localhost ansible_connection=local' > /etc/ansible/hosts";
+    echo 'localhost ansible_connection=local' > /etc/ansible/hosts"
   - >
     docker exec "$(cat ${container_id})" bash -c "
     if [ \"$ANSIBLE_VERSION\" = \"latest\" ]; then pip install ansible;
     else pip install ansible==$ANSIBLE_VERSION; fi"
   - >
     docker exec "$(cat ${container_id})" bash -c "
-    if [ \"$ANSIBLE_VERSION\" = \"latest\" ]; then pip install ansible-lint &&
-    pip install yamllint; fi"
+    [[ \"$ANSIBLE_VERSION\" == \"latest\" &&
+    \"$DOCKER_DISTRO\" =~ \"stretch\" ]] &&
+    pip install ansible-lint &&
+    pip install yamllint"
 
 script:
   # Check the role/playbook's syntax.
@@ -85,13 +87,15 @@ script:
 
   - >
     docker exec "$(cat ${container_id})" bash -c "
-    if [ \"$ANSIBLE_VERSION\" = \"latest\" ]; then
-    ansible-lint /etc/ansible/roles/rkhunter/tests/test.yml; fi"
+    [[ \"$ANSIBLE_VERSION\" == \"latest\" &&
+    \"$DOCKER_DISTRO\" =~ \"stretch\" ]] &&
+    ansible-lint /etc/ansible/roles/rkhunter/tests/test.yml"
 
   - >
     docker exec "$(cat ${container_id})" bash -c "
-    if [ \"$ANSIBLE_VERSION\" = \"latest\" ]; then
-    yamllint /etc/ansible/roles/rkhunter/; fi"
+    [[ \"$ANSIBLE_VERSION\" == \"latest\" &&
+    \"$DOCKER_DISTRO\" =~ \"stretch\" ]] &&
+    yamllint /etc/ansible/roles/rkhunter/"
 
 after_script:
   - docker rm -f "$(cat ${container_id})"
