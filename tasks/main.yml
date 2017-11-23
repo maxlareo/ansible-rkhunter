@@ -37,17 +37,6 @@
     - rkhunter
     - rkhunter-configuration
 
-# By default, on debian, the log file is /var/log/rkhunter.log
-- name: Create logfile directory
-  file:
-    path: '/var/log/rkhunter/'
-    state: 'directory'
-    mode: 0644
-  tags:
-    - configuration
-    - rkhunter
-    - rkhunter-configuration
-
 - name: rkhunter update
   command: rkhunter --update
   register: rkhunter_update
