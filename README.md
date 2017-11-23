@@ -12,13 +12,13 @@ None
 
 ### About the `/etc/default/rkhunter` file
 
-- `rkhunter_cron_daily_run`: [default: `true`]: Set this to yes to enable rkhunter daily runs
-- `rkhunter_cron_db_update`: [default: `true`]: Set this to yes to enable rkhunter weekly database updates
-- `rkhunter_db_update_email`: [default: `false`]: Set this to yes to enable reports of weekly database updates
+- `rkhunter_cron_daily_run`: [default: `'true'`]: Set this to yes to enable rkhunter daily runs
+- `rkhunter_cron_db_update`: [default: `'true'`]: Set this to yes to enable rkhunter weekly database updates
+- `rkhunter_db_update_email`: [default: `'false'`]: Set this to yes to enable reports of weekly database updates
 - `rkhunter_report_email`: [default: `root`]: Set this to the email address where reports and run output should be sent
-- `rkhunter_apt_autogen`: [default: `false`]: Set this to yes to enable automatic database updates
+- `rkhunter_apt_autogen`: [default: `'false'`]: Set this to yes to enable automatic database updates
 - `rkhunter_nice`: [default: `0`]: Nicenesses range from -20 (most favorable scheduling) to 19 (least favorable)
-- `rkhunter_run_check_on_battery`: [default: `false`]: Should daily check be run when running on battery, powermgmt-base is required to detect if running on battery or on AC power
+- `rkhunter_run_check_on_battery`: [default: `'false'`]: Should daily check be run when running on battery, powermgmt-base is required to detect if running on battery or on AC power
 
 ### About the `/etc/rkhunter.conf` file
 

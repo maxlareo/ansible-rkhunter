@@ -1,13 +1,13 @@
 ---  # defaults file for rkhunter
 
 # /etc/default/rkhunter
-rkhunter_cron_daily_run: true
-rkhunter_cron_db_update: true
-rkhunter_db_update_email: false
+rkhunter_cron_daily_run: 'true'
+rkhunter_cron_db_update: 'true'
+rkhunter_db_update_email: 'false'
 rkhunter_report_email: root
-rkhunter_apt_autogen: false
+rkhunter_apt_autogen: 'false'
 rkhunter_nice: 0
-rkhunter_run_check_on_battery: false
+rkhunter_run_check_on_battery: 'false'
 
 # /etc/rkhunter.conf
 rkhunter_rotate_mirrors: 1
