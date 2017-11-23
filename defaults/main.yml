@@ -27,3 +27,8 @@ rkhunter_disable_tests: >
   suspscan hidden_ports hidden_procs deleted_files packet_cap_apps apps
 rkhunter_hash_cmd: SHA256
 rkhunter_pkgmgr: NONE
+rkhunter_existwhitelist: []
+rkhunter_attrwhitelist: []
+rkhunter_writewhitelist: []
+rkhunter_scriptwhitelist: []
+rkhunter_immutwhitelist: []

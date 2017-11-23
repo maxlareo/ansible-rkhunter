@@ -34,10 +34,6 @@ env:
   - DOCKER_DISTRO="ubuntu:trusty" ANSIBLE_VERSION=2.1.0.0
   - DOCKER_DISTRO="ubuntu:trusty" ANSIBLE_VERSION=2.0.0.0
 
-branches:
-  only:
-    - master
-
 before_install:
   - docker pull "$DOCKER_DISTRO"
 
@@ -99,3 +95,6 @@ script:
 
 after_script:
   - docker rm -f "$(cat ${container_id})"
+
+notifications:
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/
