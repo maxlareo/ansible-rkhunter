@@ -38,6 +38,11 @@ None
 - `rkhunter_disable_tests`: [default: `suspscan hidden_ports hidden_procs deleted_files packet_cap_apps apps`]: The list of disabled tests is applied to the list of enabled tests
 - `rkhunter_hash_cmd`: [default: `SHA256`]: Specify the command to use for the file properties hash value check
 - `rkhunter_pkgmgr`: [default: `NONE`]: Tells rkhunter to use the specified package manager to obtain the file property information
+- `rkhunter_existwhitelist`: [default: `[]`]: Whitelists files and directories from existing, or not existing
+- `rkhunter_attrwhitelist`: [default: `[]`]: Whitelist various attributes of the specified files
+- `rkhunter_writewhitelist`: [default: `[]`]: Allow the specified files to have the 'others' (world) permission have the write-bit set
+- `rkhunter_scriptwhitelist`: [default: `[]`]: Allow the specified files to be a script
+- `rkhunter_immutwhitelist`: [default: `[]`]: Allow the specified file to have the immutable attribute set
 
 ## Dependencies
 

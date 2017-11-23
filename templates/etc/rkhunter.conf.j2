@@ -561,6 +561,9 @@ PKGMGR={{ rkhunter_pkgmgr }}
 # The default value is the null string.
 #
 #EXISTWHITELIST=""
+{% for elem in rkhunter_existwhitelist %}
+EXISTWHITELIST="{{ elem }}"
+{% endfor %}
 
 #
 # Whitelist various attributes of the specified file. The attributes are those
@@ -572,6 +575,9 @@ PKGMGR={{ rkhunter_pkgmgr }}
 # The default value is the null string.
 #
 #ATTRWHITELIST=/usr/bin/date
+{% for elem in rkhunter_attrwhitelist %}
+ATTRWHITELIST="{{ elem }}"
+{% endfor %}
 
 #
 # Allow the specified file to have the 'others' (world) permission have the
@@ -582,6 +588,9 @@ PKGMGR={{ rkhunter_pkgmgr }}
 # The default value is the null string.
 #
 #WRITEWHITELIST=/usr/bin/date
+{% for elem in rkhunter_writewhitelist %}
+WRITEWHITELIST="{{ elem }}"
+{% endfor %}
 
 #
 # Allow the specified file to be a script.
@@ -591,6 +600,9 @@ PKGMGR={{ rkhunter_pkgmgr }}
 # The default value is the null string.
 #
 #SCRIPTWHITELIST=/usr/bin/groups
+{% for elem in rkhunter_scriptwhitelist %}
+SCRIPTWHITELIST="{{ elem }}"
+{% endfor %}
 
 #
 # Allow the specified file to have the immutable attribute set.
@@ -600,6 +612,9 @@ PKGMGR={{ rkhunter_pkgmgr }}
 # The default value is the null string.
 #
 #IMMUTWHITELIST=/sbin/ifdown
+{% for elem in rkhunter_immutwhitelist %}
+IMMUTWHITELIST="{{ elem }}"
+{% endfor %}
 
 #
 # If this option is set to '1', then the immutable-bit test is reversed. That
