@@ -99,3 +99,6 @@ script:
 
 after_script:
   - docker rm -f "$(cat ${container_id})"
+
+notifications:
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/
