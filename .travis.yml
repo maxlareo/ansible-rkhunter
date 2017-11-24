@@ -9,39 +9,60 @@ services:
   - docker
 
 env:
-  - DOCKER_DISTRO="debian:stretch" ANSIBLE_VERSION=latest
-  - DOCKER_DISTRO="debian:stretch" ANSIBLE_VERSION=2.4.0.0
-  - DOCKER_DISTRO="debian:stretch" ANSIBLE_VERSION=2.3.0.0
-  - DOCKER_DISTRO="debian:stretch" ANSIBLE_VERSION=2.2.0.0
-  - DOCKER_DISTRO="debian:stretch" ANSIBLE_VERSION=2.1.0.0
-  - DOCKER_DISTRO="debian:stretch" ANSIBLE_VERSION=2.0.0.0
-  - DOCKER_DISTRO="debian:jessie" ANSIBLE_VERSION=latest
-  - DOCKER_DISTRO="ubuntu:zesty" ANSIBLE_VERSION=latest
-  - DOCKER_DISTRO="ubuntu:trusty" ANSIBLE_VERSION=latest
+  - distro: debian9
+    init: /lib/systemd/systemd
+    run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
+    ansible_version: latest
+  - distro: debian9
+    init: /lib/systemd/systemd
+    run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
+    ansible_version: 2.4.0.0
+  - distro: debian9
+    init: /lib/systemd/systemd
+    run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
+    ansible_version: 2.3.0.0
+  - distro: debian9
+    init: /lib/systemd/systemd
+    run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
+    ansible_version: 2.2.0.0
+  - distro: debian9
+    init: /lib/systemd/systemd
+    run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
+    ansible_version: 2.1.0.0
+  - distro: debian9
+    init: /lib/systemd/systemd
+    run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
+    ansible_version: 2.0.0.0
+  - distro: debian8
+    init: /lib/systemd/systemd
+    run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
+    ansible_version: latest
+  - distro: ubuntu1604
+    init: /lib/systemd/systemd
+    run_opts: "--privileged --volume=/sys/fs/cgroup:/sys/fs/cgroup:ro"
+    ansible_version: latest
+  - distro: ubuntu1404
+    init: /sbin/init
+    run_opts: ""
+    ansible_version: latest
 
 before_install:
-  - docker pull "$DOCKER_DISTRO"
+  - 'docker pull geerlingguy/docker-${distro}-ansible:latest'
 
 install: true
 before_script:
   - container_id=$(mktemp)
   - >
-    docker run --detach
-    --volume="${PWD}":/etc/ansible/roles/rkhunter:ro
-    $DOCKER_DISTRO bash -c 'while true; do sleep 10; done' > "${container_id}"
+    docker run --detach --volume="${PWD}":/etc/ansible/roles/role_under_test:ro
+    ${run_opts} geerlingguy/docker-${distro}-ansible:latest
+    "${init}" > "${container_id}"
   - >
-    docker exec "$(cat ${container_id})" bash -c "
-    apt-get update && apt-get upgrade -y &&
-    apt-get install -y \
-      sudo build-essential libffi-dev libssl-dev python-pip python-dev &&
-    pip install --upgrade setuptools && mkdir -p /etc/ansible &&
-    echo 'localhost ansible_connection=local' > /etc/ansible/hosts"
+    if [[ "$ansible_version" != "latest" ]];
+    then docker exec "$(cat ${container_id})" bash -c "
+    pip install ansible==$ansible_version";
+    fi
   - >
-    docker exec "$(cat ${container_id})" bash -c "
-    if [ \"$ANSIBLE_VERSION\" = \"latest\" ]; then pip install ansible;
-    else pip install ansible==$ANSIBLE_VERSION; fi"
-  - >
-    if [[ "$ANSIBLE_VERSION" == "latest" && "$DOCKER_DISTRO" =~ "stretch" ]];
+    if [[ "$ansible_version" == "latest" && "$distro" == "debian9" ]];
     then docker exec "$(cat ${container_id})" bash -c "
     pip install ansible-lint &&
     pip install yamllint";
@@ -51,31 +72,32 @@ script:
   # Check the role/playbook's syntax.
   - >
     docker exec "$(cat ${container_id})"
-    ansible-playbook --syntax-check /etc/ansible/roles/rkhunter/tests/test.yml
+    ansible-playbook --syntax-check
+    /etc/ansible/roles/role_under_test/tests/test.yml
 
   # Run the role/playbook with ansible-playbook.
   - >
     docker exec "$(cat ${container_id})"
-    ansible-playbook -vvvv /etc/ansible/roles/rkhunter/tests/test.yml
+    ansible-playbook -vvvv /etc/ansible/roles/role_under_test/tests/test.yml
 
   # Run the role/playbook again, checking to make sure it's idempotent.
   - >
     docker exec "$(cat ${container_id})" bash -c "
-    ansible-playbook /etc/ansible/roles/rkhunter/tests/test.yml
+    ansible-playbook /etc/ansible/roles/role_under_test/tests/test.yml
     | grep -q 'changed=0.*failed=0'
     && (echo 'Idempotence test: pass' && exit 0)
     || (echo 'Idempotence test: fail' && exit 1)"
 
   - >
-    if [[ "$ANSIBLE_VERSION" == "latest" && "$DOCKER_DISTRO" =~ "stretch" ]];
+    if [[ "$ansible_version" == "latest" && "$distro" == "debian9" ]];
     then docker exec "$(cat ${container_id})" bash -c "
-    ansible-lint /etc/ansible/roles/rkhunter/tests/test.yml";
+    ansible-lint /etc/ansible/roles/role_under_test/tests/test.yml";
     fi
 
   - >
-    if [[ "$ANSIBLE_VERSION" == "latest" && "$DOCKER_DISTRO" =~ "stretch" ]];
+    if [[ "$ansible_version" == "latest" && "$distro" == "debian9" ]];
     then docker exec "$(cat ${container_id})" bash -c "
-    yamllint /etc/ansible/roles/rkhunter/";
+    yamllint /etc/ansible/roles/role_under_test/";
     fi
 
 after_script:

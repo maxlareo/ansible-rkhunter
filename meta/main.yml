@@ -12,7 +12,7 @@ galaxy_info:
         - jessie
     - name: Ubuntu
       versions:
-        - zesty
+        - xenial
         - trusty
 
   galaxy_tags:
