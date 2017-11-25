@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/maxlareo/ansible-rkhunter.svg?branch=master)](https://travis-ci.org/maxlareo/ansible-rkhunter) [![Ansible Galaxy](http://img.shields.io/badge/ansible--galaxy-rkhunter-blue.svg)](https://galaxy.ansible.com/maxlareo/rkhunter/)
 
-Install and configure Rootkit Hunter
+Install and configure Rootkit Hunter in Debian-like systems
 
 ## Requirements
 
@@ -65,7 +65,7 @@ None
 
 ## License
 
-Apache 2.0
+MIT
 
 ## Author Information
 
