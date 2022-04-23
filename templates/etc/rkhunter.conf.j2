@@ -91,7 +91,7 @@
 #
 # If the mirrors file is read-only, then the '--versioncheck' command-line
 # option can only be used if this option is set to '0'.
-# 
+#
 # The default value is '1'.
 #
 ROTATE_MIRRORS={{ rkhunter_rotate_mirrors }}
@@ -643,7 +643,7 @@ ALLOWHIDDENDIR="{{ elem }}"
 # This option may be specified more than once, and may use wildcard characters.
 #
 # The default value is the null string.
-# 
+#
 #ALLOWHIDDENFILE=/usr/sbin/.sshd.hmac
 {% for elem in rkhunter_allowhiddenfile %}
 ALLOWHIDDENFILE="{{ elem }}"
@@ -717,6 +717,9 @@ ALLOWPROCLISTEN="{{ elem }}"
 #
 #ALLOWDEVFILE=/dev/shm/pulse-shm-*
 #ALLOWDEVFILE=/dev/shm/sem.ADBE_*
+{% for elem in rkhunter_allowdevfile %}
+ALLOWDEVFILE="{{ elem }}"
+{% endfor %}
 
 #
 # Allow the specified process pathnames to use shared memory segments.
@@ -882,7 +885,7 @@ ALLOWPROCLISTEN="{{ elem }}"
 #
 #APP_WHITELIST=""
 
-# 
+#
 # Set this option to scan for suspicious files in directories which pose a
 # relatively higher risk due to user write access.
 #
@@ -893,7 +896,7 @@ ALLOWPROCLISTEN="{{ elem }}"
 #
 # Please consider adding all directories the user the (web)server runs as,
 # and has write access to, including the document root (e.g: '/var/www') and
-# log directories (e.g: '/var/log/httpd'). 
+# log directories (e.g: '/var/log/httpd').
 #
 # This is a space-separated list of directory pathnames. The option may be
 # specified more than once.
@@ -931,7 +934,7 @@ ALLOWPROCLISTEN="{{ elem }}"
 
 #
 # The following options can be used to whitelist network ports which are known
-# to have been used by malware. 
+# to have been used by malware.
 #
 # The PORT_WHITELIST option is a space-separated list of one or more of two
 # types of whitelisting. These are:
@@ -1203,10 +1206,10 @@ PORT_PATH_WHITELIST="{{ elem }}"
 #
 # You should only activate this feature as part of a more thorough
 # investigation, which should be based on relevant best practices and
-# procedures. 
+# procedures.
 #
 # Enabling this feature implies you have the knowledge to interpret the
-# results properly. 
+# results properly.
 #
 # The default value is the null string.
 #
